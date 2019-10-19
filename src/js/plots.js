@@ -1,15 +1,12 @@
 import * as d3 from "d3"
 import d3Tip from "d3-tip"
 import React from 'react';
-import midwest_data from '../midwest.csv';
-import iris_data from '../iris.csv';
 import ScatterPlot from './scatterplot'
 
 
 export default class Plots extends React.Component {
     constructor(props) {
         super(props);
-
         // Set initial state
         this.state = {
           data: [],
@@ -17,15 +14,16 @@ export default class Plots extends React.Component {
           yVar: "nickelPercent_USA",
           options: ['antimonyPercent','arsenicPercent','bismuthPercent', 'cobaltPercent',
             'copperPercent', 'leadPercent', 'nickelPercent','seleniumPercent', 'silverPercent',
-            'sulfurPercent', 'telluriumPercent', 'tinPercent', 'zincPercent'],
-          countries: ['USA', 'Turkey']
+            'sulfurPercent', 'telluriumPercent', 'tinPercent', 'zincPercent', 'goldPercent'],
+          countries: [this.props.country1, this.props.country2, this.props.country3]
         };
     }
     componentDidMount() {
       // Picker options
-      let _options = [];
+      let currentState = this;
+      let _options = [];     
       this.state.options.map((d) => {
-        for(let x = 0; x < this.state.countries.length; x ++) {
+        for(let x = 0; x < this.state.countries.length; x++) {
           _options.push(d + '_' + this.state.countries[x]);
         };
       });
@@ -37,7 +35,7 @@ export default class Plots extends React.Component {
       });
       data.allMetal.edges.forEach(function(element){
         let country = element.node.country
-        if (country == 'Turkey' || country == 'USA') {
+        if (country == currentState.props.country1 || country == currentState.props.country2 || country == currentState.props.country3) {
           let node = {
             'country': country,
             'description': element.node.description,
@@ -53,17 +51,6 @@ export default class Plots extends React.Component {
       });
       data = this.convertToWeightPercent(graph_data);
       this.setState({data: data, options: _options});
-        // Load data when the component mounts
-      // let currentState = this;
-      // d3.csv(midwest_data)
-      //   .then(function(data) {
-      //     // data is now whole data set
-      //     // draw chart in here
-      //     currentState.setState({data: data});
-      //   })
-      //   .catch(function(error){
-      //     console.log(error);
-      //   });
     }
     convertToWeightPercent(data) {
       let graph_data = []
@@ -132,12 +119,9 @@ export default class Plots extends React.Component {
     }
     render() {
         // Get list of possible x and y variables
-        // let options = this.state.data.length === 0 ? [] : Object.keys(this.state.data[0]);
-        // options = options.filter((d) => d != "country" && d != "description");
         let options = this.state.options;
         // Store all of the data to be plotted 
         let allData = this.state.data.map((d) => {
-          //console.log(d);
           return {
             x: d[this.state.xVar],
             y: d[this.state.yVar],

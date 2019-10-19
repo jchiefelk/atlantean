@@ -42,16 +42,13 @@ class ScatterPlot extends React.Component {
         const colorValue = function(d) { 
           return d.label;
         }
-        
         //Define hovers 
         //Add tip
         let tip = d3Tip().attr('class', 'd3-tip').html(function (d) {
             return d.label;
         });
-
         // Select all circles and bind data
         let circles = d3.select(this.chartArea).selectAll('circle').data(this.props.data);
-        
         // Use the .enter() method to get your entering elements, and assign their positions
         circles.enter().append('circle')
             .merge(circles)
@@ -67,14 +64,13 @@ class ScatterPlot extends React.Component {
             .style('stroke', "black")
             .style('stroke-width', (d) => d.selected == true ? "3px" : "0px")
 
-
         // Use the .exit() and .remove() methods to remove elements that are no longer in the data
         circles.exit().remove();
 
         // Add hovers using the d3-tip library        
         d3.select(this.chartArea).call(tip);
 
-          // draw legend
+        // draw legend
         const legend = svg.selectAll(".legend")
           .data(colorScale.domain())
           .enter().append("g")

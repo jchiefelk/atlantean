@@ -3,11 +3,11 @@ import d3Tip from "d3-tip"
 import React from 'react';
 
 import Plots from './plots';
+import BarChart from './barchart';
 
 import { Query } from '@apollo/react-components';
 import { gql } from "apollo-boost";
 
-import midwest_data from '../midwest.csv';
 
 const COMBINED_QUERIES = gql`
 {
@@ -40,6 +40,8 @@ const COMBINED_QUERIES = gql`
         nickelPercent
         cobaltPercent
         cobaltPpm
+        goldPercent
+        goldPpm
         zincPercent
         zincPpm
         sulfurPercent
@@ -56,11 +58,17 @@ const COMBINED_QUERIES = gql`
         telluriumPpm
         bismuthPercent
         bismuthPpm
+        ironPercent
+        ironPpm
       }
     }
   }
 }
 `
+
+// const App = () => {
+//   return <BarChart data={data} width={800} height={500} />;
+// }
 
 const App = () => (
   <Query query={COMBINED_QUERIES} >
@@ -72,9 +80,38 @@ const App = () => (
       if (error) {
         return <h1>ERROR</h1>;
       }
-      return <Plots data={data}/>;
+
+      return(
+        <div style={{'marginLeft': 100}}>
+          <BarChart element_data={data} width={800} height={500} />
+        </div>
+      );
     }}
   </Query>
 );
+
+// const App = () => (
+//   <Query query={COMBINED_QUERIES} >
+//     {result => {
+//       const { loading, error, data } = result;
+//       if (loading) {
+//         return <div className="loader"></div>;
+//       }
+//       if (error) {
+//         return <h1>ERROR</h1>;
+//       }
+
+//       return (
+//         <table>
+//           <tr>
+//             <th><Plots data={data} country1={'USA'} country2={'Turkey'} country3={'Cyprus'}/></th>
+//             <th><Plots data={data} country1={'USA'} country2={'Turkey'} country3={'Cyprus'}/></th>
+//             <th><Plots data={data} country1={'USA'} country2={'Turkey'} country3={'Cyprus'}/></th> 
+//           </tr>
+//         </table>
+//       );
+//     }}
+//   </Query>
+// );
 
 export default App;
