@@ -40,7 +40,7 @@ circle {
 }
 .axis-label {
     text-anchor:middle;
-    font-size:10px;
+    font-size:0.65em;
 }
 
 .chart-wrapper {

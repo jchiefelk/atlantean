@@ -9,14 +9,14 @@ export default class YAxis extends React.Component {
 
   render() {
     let style = {
-      stroke: "steelblue",
+      stroke: "black",
       strokeWidth: "1px"
     }
     
     let textStyle = {
-      fontSize: "0.8em",
-      fill: "steelblue",
-      textAnchor: "end"
+      fontSize: "0.65em",
+      fill: "black",
+      textAnchor: "end",
     }
     
     //D3 mathy bits
@@ -30,7 +30,6 @@ export default class YAxis extends React.Component {
     
     let columnLables = []
     ticks.forEach((tick, index) => {
-      console.log(this.props.labels[index])
       columnLables.push(<text style={ textStyle } y={tick + 6} x={this.props.y - 6} font-family="Verdana">{percentage(this.props.labels[index]/100)}</text>)
     })
     

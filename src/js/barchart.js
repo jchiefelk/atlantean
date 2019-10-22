@@ -43,8 +43,8 @@ export default class BarChart extends React.Component {
         'zinc': 0,
         'iron': 0
       }, 
-      'country': 'Cyprus',
-      'description': 'Copper Ore'
+      'country': this.props.country,
+      'description': this.props.description
     };
   }
   componentDidMount(){
@@ -83,6 +83,7 @@ export default class BarChart extends React.Component {
   convertToWeightPercent(data) {
     let graph_data = []
     let histogram = this.state.histogram;
+    let country = '';
     data.forEach(function(element){
       let node = { };
       for(let key in element) {
@@ -142,6 +143,8 @@ export default class BarChart extends React.Component {
           histogram[new_key] = histogram[new_key] + value;
         }
     };
+    
+    country = element.country;
   });
 
   let new_histogram = [];
@@ -152,7 +155,8 @@ export default class BarChart extends React.Component {
       histogram[key] = histogram[key]/data.length;
       let _hist = {
         'element': this.elementSymbols[key],
-        'percent': histogram[key]
+        'percent': histogram[key],
+        'country': country
       };
       new_histogram.push(_hist)
     }
@@ -179,10 +183,10 @@ export default class BarChart extends React.Component {
       .range([height, 0])
 
     let bars = []
-    let bottom = 450
+    let bottom = this.props.height - 50;
     
     data.forEach((datum, index) => {
-      bars.push(<Bar key={index} x={x(datum.element)} y={bottom - 6 - (height - y(datum.percent))} width={10} height={height - y(datum.percent)} />)
+      bars.push(<Bar data={data} key={index} x={x(datum.element)} y={bottom - 6 - (height - y(datum.percent))} width={10} height={height - y(datum.percent)} fill_color={this.props.fill_color}/>)
     })
 
     return (

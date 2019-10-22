@@ -70,26 +70,6 @@ const COMBINED_QUERIES = gql`
 //   return <BarChart data={data} width={800} height={500} />;
 // }
 
-const App = () => (
-  <Query query={COMBINED_QUERIES} >
-    {result => {
-      const { loading, error, data } = result;
-      if (loading) {
-        return <div className="loader"></div>;
-      }
-      if (error) {
-        return <h1>ERROR</h1>;
-      }
-
-      return(
-        <div style={{'marginLeft': 100}}>
-          <BarChart element_data={data} width={800} height={500} />
-        </div>
-      );
-    }}
-  </Query>
-);
-
 // const App = () => (
 //   <Query query={COMBINED_QUERIES} >
 //     {result => {
@@ -101,17 +81,42 @@ const App = () => (
 //         return <h1>ERROR</h1>;
 //       }
 
-//       return (
-//         <table>
-//           <tr>
-//             <th><Plots data={data} country1={'USA'} country2={'Turkey'} country3={'Cyprus'}/></th>
-//             <th><Plots data={data} country1={'USA'} country2={'Turkey'} country3={'Cyprus'}/></th>
-//             <th><Plots data={data} country1={'USA'} country2={'Turkey'} country3={'Cyprus'}/></th> 
-//           </tr>
-//         </table>
+//       return(
+//         <div style={{'marginLeft': 100}}>
+//           <BarChart element_data={data} width={800} height={500} />
+//         </div>
 //       );
 //     }}
 //   </Query>
 // );
+
+const App = () => (
+  <Query query={COMBINED_QUERIES} >
+    {result => {
+      const { loading, error, data } = result;
+      if (loading) {
+        return <div className="loader"></div>;
+      }
+      if (error) {
+        return <h1>ERROR</h1>;
+      }
+
+      return (
+        <table>
+          <tr>
+            <th><Plots data={data} country1={'USA'} country2={'Turkey'} country3={'Cyprus'}/></th>
+            <th><Plots data={data} country1={'USA'} country2={'Turkey'} country3={'Cyprus'}/></th>
+            <th><Plots data={data} country1={'USA'} country2={'Turkey'} country3={'Cyprus'}/></th> 
+          </tr>
+          <tr>
+            <th><div style={{'marginLeft': 100}}><BarChart element_data={data} width={400} height={300} country={'USA'} fill_color={'red'} description={'Copper Ore'}/></div></th>
+            <th><div style={{'marginLeft': 100}}><BarChart element_data={data} width={400} height={300} country={'Cyprus'} fill_color={'black'} description={'Copper Ore'}/></div></th>
+            <th><div style={{'marginLeft': 100}}><BarChart element_data={data} width={400} height={300} country={'Turkey'} fill_color={'blue'} description={'Uluburun'}/></div></th>
+          </tr>
+        </table>
+      );
+    }}
+  </Query>
+);
 
 export default App;

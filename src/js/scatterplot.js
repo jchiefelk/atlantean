@@ -36,7 +36,7 @@ class ScatterPlot extends React.Component {
           .attr('transform', `translate(${this.props.margin.left},${this.props.margin.top})`);
 
         const colorScale = d3.scaleOrdinal()
-          .range(d3.schemeCategory10);
+          .range(['red', 'black', 'blue']);
 
         const colorLabel = 'Origin';
         const colorValue = function(d) { 
@@ -133,7 +133,7 @@ class ScatterPlot extends React.Component {
                     <text className="axis-label" transform={`translate(${this.props.margin.left + this.drawWidth / 2}, 
                         ${this.props.height - this.props.margin.bottom + 30})`}>{this.props.xTitle}</text>
 
-                    <text className="axis-label" transform={`translate(${this.props.margin.left - 30}, 
+                    <text className="axis-label" transform={`translate(${this.props.margin.left - 40}, 
                         ${this.drawHeight / 2 + this.props.margin.top}) rotate(-90)`}>{this.props.yTitle}</text>
                 </svg>
             </div>

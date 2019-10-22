@@ -10,11 +10,11 @@ export default class Plots extends React.Component {
         // Set initial state
         this.state = {
           data: [],
-          xVar: "arsenicPercent_USA",
-          yVar: "nickelPercent_USA",
-          options: ['antimonyPercent','arsenicPercent','bismuthPercent', 'cobaltPercent',
-            'copperPercent', 'leadPercent', 'nickelPercent','seleniumPercent', 'silverPercent',
-            'sulfurPercent', 'telluriumPercent', 'tinPercent', 'zincPercent', 'goldPercent'],
+          xVar: 'copper wt(%) in USA',
+          yVar: 'arsenic wt(%) in USA',
+          options: ['iron', 'antimony','arsenic','bismuth', 'cobalt',
+            'copper', 'lead', 'nickel','selenium', 'silver',
+            'sulfur', 'tellurium', 'tin', 'zinc', 'gold'],
           countries: [this.props.country1, this.props.country2, this.props.country3]
         };
     }
@@ -24,7 +24,7 @@ export default class Plots extends React.Component {
       let _options = [];     
       this.state.options.map((d) => {
         for(let x = 0; x < this.state.countries.length; x++) {
-          _options.push(d + '_' + this.state.countries[x]);
+          _options.push(d + ' wt(%) in ' + this.state.countries[x]);
         };
       });
       let graph_data = [];
@@ -60,32 +60,34 @@ export default class Plots extends React.Component {
         for (let key in element) {
 
           let node = {
-            'antimonyPercent': element.antimonyPercent,
-            'antimonyPpm': element.antimonyPpm,
-            'arsenicPercent': element.arsenicPercent,
-            'arsenicPpm': element.arsenicPpm,
-            'bismuthPercent': element.bismuthPercent,
-            'bismuthPpm': element.bismuthPpm,
-            'cobaltPercent': element.cobaltPercent,
-            'cobaltPpm': element.cobaltPpm,
-            'copperPercent': element.copperPercent,
-            'copperPpm': element.copperPpm,
-            'leadPercent': element.leadPercent,
-            'leadPpm': element.leadPpm,
-            'nickelPercent': element.nickelPercent,
-            'nickelPpm': element.nickelPpm,
-            'seleniumPercent': element.seleniumPercent,
-            'seleniumPpm': element.seleniumPpm,
-            'silverPercent': element.silverPercent,
-            'silverPpm': element.silverPpm,
-            'sulfurPercent': element.sulfurPercent,
-            'sulfurPpm': element.sulfurPpm,
-            'telluriumPercent': element.telluriumPercent,
-            'telluriumPpm': element.telluriumPpm,
-            'tinPercent': element.tinPercent,
-            'tinPpm': element.tinPpm,
-            'zincPercent': element.zincPercent,
-            'zincPpm': element.zincPpm
+          'antimonyPercent': element.antimonyPercent,
+          'antimonyPpm': element.antimonyPpm,
+          'arsenicPercent': element.arsenicPercent,
+          'arsenicPpm': element.arsenicPpm,
+          'bismuthPercent': element.bismuthPercent,
+          'bismuthPpm': element.bismuthPpm,
+          'cobaltPercent': element.cobaltPercent,
+          'cobaltPpm': element.cobaltPpm,
+          'copperPercent': element.copperPercent,
+          'copperPpm': element.copperPpm,
+          'ironPpm': element.ironPpm,
+          'ironPercent': element.ironPercent,
+          'leadPercent': element.leadPercent,
+          'leadPpm': element.leadPpm,
+          'nickelPercent': element.nickelPercent,
+          'nickelPpm': element.nickelPpm,
+          'seleniumPercent': element.seleniumPercent,
+          'seleniumPpm': element.seleniumPpm,
+          'silverPercent': element.silverPercent,
+          'silverPpm': element.silverPpm,
+          'sulfurPercent': element.sulfurPercent,
+          'sulfurPpm': element.sulfurPpm,
+          'telluriumPercent': element.telluriumPercent,
+          'telluriumPpm': element.telluriumPpm,
+          'tinPercent': element.tinPercent,
+          'tinPpm': element.tinPpm,
+          'zincPercent': element.zincPercent,
+          'zincPpm': element.zincPpm
           };
         
           for(let _key in node) {
@@ -93,17 +95,22 @@ export default class Plots extends React.Component {
                 delete node[_key];
                 continue;
             } 
+
+            if(node[_key].includes('<') == true) {
+             let new_value = node[_key].split('<');
+             node[_key] = new_value[1];
+            }
           
             let metal_measurement = _key.split('P')
             
             if(metal_measurement[1] == 'pm') {
               let value = node[_key]/10000;
-              let new_key = metal_measurement[0] + 'Percent_' + element.country;
+              let new_key = metal_measurement[0] + ' wt(%) in ' + element.country;
               delete node[_key];
               node[new_key] = value;
             } else {
               let value = parseFloat(node[_key])
-              let new_key = _key + '_' + element.country;
+              let new_key = metal_measurement[0] + ' wt(%) in ' + element.country;
               delete node[_key];
               node[new_key] = value;
             }
@@ -158,6 +165,7 @@ export default class Plots extends React.Component {
                 {/* Render scatter plot */}
 
                 <ScatterPlot
+                    fill_color={this.props.fill_color}
                     xTitle={this.state.xVar}
                     yTitle={this.state.yVar}
                     data={allData}

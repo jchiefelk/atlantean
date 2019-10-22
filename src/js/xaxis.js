@@ -9,7 +9,7 @@ export default class XAxis extends React.Component {
 
   render() {
     let style = {
-      stroke: "steelblue",
+      stroke: "black",
       strokeWidth: "1px"
     }
     
@@ -25,14 +25,14 @@ export default class XAxis extends React.Component {
     
     let columnLables = []
     ticks.forEach((tick, index) => {
-      columnLables.push(<text style={{fill: "steelblue"}} x={tick + 5} y={this.props.x + 20} font-family="Verdana" font-size="15"
+      columnLables.push(<text style={{fill: 'black'}} x={tick + 5} y={this.props.x + 20} font-family="Verdana" font-size="0.65em"
         >{this.props.labels[index]}</text>)
     })
     
   
     return(
       <g>
-        <line x1={this.props.start} y1={this.props.x } x2={this.props.end} y2={this.props.x} style={ style } />
+        <line x1={this.props.start} y1={this.props.x} x2={this.props.end} y2={this.props.x} style={ style } />
         { columnLables }
         { lines }
       </g>
