@@ -10,12 +10,12 @@ export default class Plots extends React.Component {
         // Set initial state
         this.state = {
           data: [],
-          xVar: 'copper wt(%) in USA',
-          yVar: 'arsenic wt(%) in USA',
+          xVar: this.props.xVar,
+          yVar: this.props.yVar,
           options: ['iron', 'antimony','arsenic','bismuth', 'cobalt',
             'copper', 'lead', 'nickel','selenium', 'silver',
             'sulfur', 'tellurium', 'tin', 'zinc', 'gold'],
-          countries: [this.props.country1, this.props.country2, this.props.country3]
+          countries: this.props.countries
         };
     }
     componentDidMount() {
@@ -34,17 +34,18 @@ export default class Plots extends React.Component {
         elementTraceMap[element.node.id] = index
       });
       data.allMetal.edges.forEach(function(element){
-        let country = element.node.country
-        if (country == currentState.props.country1 || country == currentState.props.country2 || country == currentState.props.country3) {
+        if(currentState.props.countries.indexOf(element.node.country) === -1) {
+          return;
+        }
+        else {
           let node = {
-            'country': country,
+            'country': element.node.country,
             'description': element.node.description,
             'site': element.node.site,
             'source':  element.node.source,
           };
           let elementTraceId = element.node.elementTraceAssayId.id;
           let elementTraceData = data.allElements.edges[elementTraceMap[elementTraceId]];
-
           let combined_node = Object.assign(node, elementTraceData.node);
           graph_data.push(combined_node)
         }
@@ -124,9 +125,37 @@ export default class Plots extends React.Component {
       
       return graph_data;
     }
+
+    renderOptions() {
+      // Get list of possible x and y variables
+      let options = this.state.options;
+      return (
+        <div className="control-container">
+
+            {/* X Variable Select Menu */}
+            <div className="control-wrapper">
+                <label htmlFor="xVar">X Variable:</label>
+                <select id="xVar" value={this.state.xVar} className="custom-select" onChange={(d) => this.setState({ xVar: d.target.value })}>
+                    {options.map((d) => {
+                        return <option key={d}>{d}</option>
+                    })}
+                </select>
+            </div>
+
+            {/* Y Variable Select Menu */}
+            <div className="control-wrapper">
+                <label htmlFor="yVar">Y Variable:</label>
+                <select id="yVar" value={this.state.yVar} className="custom-select" onChange={(d) => this.setState({ yVar: d.target.value })}>
+                    {options.map((d) => {
+                        return <option key={d}>{d}</option>
+                    })}
+                </select>
+            </div>                        
+        </div>
+      );
+    }
+
     render() {
-        // Get list of possible x and y variables
-        let options = this.state.options;
         // Store all of the data to be plotted 
         let allData = this.state.data.map((d) => {
           return {
@@ -138,32 +167,6 @@ export default class Plots extends React.Component {
 
         return (
             <div className="container">
-
-                <div className="control-container">
-
-                    {/* X Variable Select Menu */}
-                    <div className="control-wrapper">
-                        <label htmlFor="xVar">X Variable:</label>
-                        <select id="xVar" value={this.state.xVar} className="custom-select" onChange={(d) => this.setState({ xVar: d.target.value })}>
-                            {options.map((d) => {
-                                return <option key={d}>{d}</option>
-                            })}
-                        </select>
-                    </div>
-
-                    {/* Y Variable Select Menu */}
-                    <div className="control-wrapper">
-                        <label htmlFor="yVar">Y Variable:</label>
-                        <select id="yVar" value={this.state.yVar} className="custom-select" onChange={(d) => this.setState({ yVar: d.target.value })}>
-                            {options.map((d) => {
-                                return <option key={d}>{d}</option>
-                            })}
-                        </select>
-                    </div>                        
-                </div>
-
-                {/* Render scatter plot */}
-
                 <ScatterPlot
                     fill_color={this.props.fill_color}
                     xTitle={this.state.xVar}

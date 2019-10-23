@@ -66,29 +66,8 @@ const COMBINED_QUERIES = gql`
 }
 `
 
-// const App = () => {
-//   return <BarChart data={data} width={800} height={500} />;
-// }
-
-// const App = () => (
-//   <Query query={COMBINED_QUERIES} >
-//     {result => {
-//       const { loading, error, data } = result;
-//       if (loading) {
-//         return <div className="loader"></div>;
-//       }
-//       if (error) {
-//         return <h1>ERROR</h1>;
-//       }
-
-//       return(
-//         <div style={{'marginLeft': 100}}>
-//           <BarChart element_data={data} width={800} height={500} />
-//         </div>
-//       );
-//     }}
-//   </Query>
-// );
+const fillColors = ['red', 'black', 'purple', 'gray', 'orange', 'lightskyblue', 'limegreen', 'pink'];
+const countries = ['Turkey', 'Cyprus', 'Sardinia', 'USA', 'Britain', 'Greece, Crete', 'Greece', 'Spain'];
 
 const App = () => (
   <Query query={COMBINED_QUERIES} >
@@ -104,14 +83,29 @@ const App = () => (
       return (
         <table>
           <tr>
-            <th><Plots data={data} country1={'USA'} country2={'Turkey'} country3={'Cyprus'}/></th>
-            <th><Plots data={data} country1={'USA'} country2={'Turkey'} country3={'Cyprus'}/></th>
-            <th><Plots data={data} country1={'USA'} country2={'Turkey'} country3={'Cyprus'}/></th> 
+            <th><Plots fill_color={fillColors} data={data} countries={countries} xVar={'copper wt(%) in Cyprus'} yVar={'iron wt(%) in Cyprus'}/></th>
+            <th><Plots fill_color={fillColors} data={data} countries={countries} xVar={'copper wt(%) in Turkey'} yVar={'iron wt(%) in Turkey'}/></th>
+            <th><Plots fill_color={fillColors} data={data} countries={countries} xVar={'copper wt(%) in Greece, Crete'} yVar={'iron wt(%) in Greece, Crete'}/></th>
+            <th><Plots fill_color={fillColors} data={data} countries={countries} xVar={'copper wt(%) in Greece'} yVar={'iron wt(%) in Greece'}/></th>
           </tr>
           <tr>
-            <th><div style={{'marginLeft': 100}}><BarChart element_data={data} width={400} height={300} country={'USA'} fill_color={'red'} description={'Copper Ore'}/></div></th>
-            <th><div style={{'marginLeft': 100}}><BarChart element_data={data} width={400} height={300} country={'Cyprus'} fill_color={'black'} description={'Copper Ore'}/></div></th>
-            <th><div style={{'marginLeft': 100}}><BarChart element_data={data} width={400} height={300} country={'Turkey'} fill_color={'blue'} description={'Uluburun'}/></div></th>
+            <th><Plots fill_color={fillColors} data={data} countries={countries} xVar={'copper wt(%) in Sardinia'} yVar={'iron wt(%) in Sardinia'}/></th>
+            <th><Plots fill_color={fillColors} data={data} countries={countries} xVar={'copper wt(%) in USA'} yVar={'iron wt(%) in USA'}/></th>
+            <th><Plots fill_color={fillColors} data={data} countries={countries} xVar={'copper wt(%) in Britain'} yVar={'iron wt(%) in Britain'}/></th>
+            <th><Plots fill_color={fillColors} data={data} countries={countries} xVar={'copper wt(%) in Spain'} yVar={'iron wt(%) in Spain'}/></th>
+          </tr>
+  
+          <tr>
+            <th><div style={{'marginLeft': 100}}><BarChart data={data} width={400} height={300} country={'Cyprus'} fill_color={'limegreen'} description={'Copper Ore'}/></div></th>
+            <th><div style={{'marginLeft': 100}}><BarChart data={data} width={400} height={300} country={'Turkey'} fill_color={'pink'} description={'Uluburun Shipreck Bun and Oxhide Ingots'}/></div></th>
+            <th><div style={{'marginLeft': 100}}><BarChart data={data} width={400} height={300} country={'Greece, Crete'} fill_color={'red'} description={'Copper Artifacts'}/></div></th>
+           <th><div style={{'marginLeft': 100}}><BarChart data={data} width={400} height={300} country={'Greece'} fill_color={'black'} description={'Copper Artifacts'}/></div></th>
+          </tr>
+          <tr>
+            <th><div style={{'marginLeft': 100}}><BarChart data={data} width={400} height={300} country={'Sardinia'} fill_color={'lightskyblue'} description={'Bun and Oxhide Ingots'}/></div></th>
+            <th><div style={{'marginLeft': 100}}><BarChart data={data} width={400} height={300} country={'Britain'} fill_color={'orange'} description={'Bun Ingots'}/></div></th>
+            <th><div style={{'marginLeft': 100}}><BarChart data={data} width={400} height={300} country={'Spain'} fill_color={'purple'} description={'Copper Artifacts'}/></div></th>
+            <th><div style={{'marginLeft': 100}}><BarChart data={data} width={400} height={300} country={'USA'} fill_color={'gray'} description={'Copper Ore and Artifacts'}/></div></th>
           </tr>
         </table>
       );

@@ -49,7 +49,7 @@ export default class BarChart extends React.Component {
   }
   componentDidMount(){
     let currentState = this;
-    let data = this.props.element_data;
+    let data = this.props.data;
     let elementTrace = {};
     let graph_data = [];
     data.allElements.edges.forEach(function(element, index){
@@ -191,7 +191,7 @@ export default class BarChart extends React.Component {
 
     return (
     <div>
-    <h4>{this.state.country} {this.state.description} Trace Elements</h4>
+    <h6>{this.state.country} {this.state.description} Trace Elements</h6>
       <svg width={this.props.width} height={this.props.height}>
       	<YAxis y={40} labels={y.ticks().reverse()} start={15} end={height} />
 	      

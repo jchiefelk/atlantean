@@ -36,7 +36,7 @@ class ScatterPlot extends React.Component {
           .attr('transform', `translate(${this.props.margin.left},${this.props.margin.top})`);
 
         const colorScale = d3.scaleOrdinal()
-          .range(['red', 'black', 'blue']);
+          .range(this.props.fill_color);
 
         const colorLabel = 'Origin';
         const colorValue = function(d) { 
