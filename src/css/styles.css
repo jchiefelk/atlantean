@@ -1,13 +1,24 @@
 @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css");
 
+.body {
+  margin: 1em;
+  display: table;
+  font-family: "Helvetica Neue", sans-serif;
+}
+.regression {
+  stroke-width: 2px;
+  stroke: steelblue;
+  stroke-dasharray: 10,5;
+}
+.equation {
+  font-size: 12px;
+  margin-top: 10px;
+  text-align: center;
+}
+
 /* Header */
 .container {
     text-align: center;
-}
-
-.jumbotron {
-    padding:1rem 1rem;
-    margin-bottom:20px;
 }
 
 .lead {
@@ -114,4 +125,10 @@ circle {
   top: 50%;
   left: 100%;
 }
-  
+
+.regression {
+  stroke-width: 2px;
+  stroke: steelblue;
+  stroke-dasharray: 10,5;
+}
+ 
