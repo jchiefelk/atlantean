@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {scaleOrdinal, axisBottom, select} from 'd3';
 import * as d3 from "d3";
 
 
@@ -99,87 +98,84 @@ class ScatterPlotWithTrendline extends Component {
     }
   }
   renderSvg() {
+    var margin = this.props.margin;
+    var width = this.props.width - margin.left - margin.right;
+    var height = this.props.height - margin.top - margin.bottom;
 
-    if(this.props.data.length > 0) {
-      var currentState = this
-      var margin = this.props.margin;
-      var width = this.props.width - margin.left - margin.right;
-      var height = this.props.height - margin.top - margin.bottom;
+    var svg = d3.select("body").select("#" + this.props.country)
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      var svg = d3.select("body").select("#" + this.props.country)
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    var x = d3.scaleLinear()
+        .range([0, width]);
 
-      var x = d3.scaleLinear()
-          .range([0, width]);
+    var y = d3.scaleLinear()
+        .range([height, 0]);
 
-      var y = d3.scaleLinear()
-          .range([height, 0]);
+    var xAxis = d3.axisBottom()
+        .scale(x)
+        .ticks(5)
+        .tickFormat(d3.format(".0%"));
 
-      var xAxis = d3.axisBottom()
-          .scale(x)
-          .ticks(5)
-          .tickFormat(d3.format(".0%"));
+    var yAxis = d3.axisLeft()
+        .scale(y)
+        .ticks(5)
+        .tickFormat(d3.format(".3%"));
+    
+      y.domain(d3.extent(this.props.data, function(d){ return d.y}));
+      x.domain(d3.extent(this.props.data, function(d){ return d.x}));
 
-      var yAxis = d3.axisLeft()
-          .scale(y)
-          .ticks(5)
-          .tickFormat(d3.format(".3%"));
+      // // see below for an explanation of the calcLinear function
+      var lg = this.calcLinear(this.props.data, "x", "y", d3.min(this.props.data, function(d){ return d.x}), d3.min(this.props.data, function(d){ return d.x}));
+      svg.append("line")
+          .attr("class", "regression-" + this.props.country)
+          .attr("x1", x(lg.ptA.x))
+          .attr("y1", y(lg.ptA.y))
+          .attr("x2", x(lg.ptB.x))
+          .attr("y2", y(lg.ptB.y))
+          .attr("stroke", this.props.fill_color)
+          .attr("stroke-width", '3px')
+          .attr("stroke-dasharray", "10,5");
+
+      svg.append("g")
+          .attr("class", "x-axis-" + this.props.country)
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis)
+
+
+      svg.append("g")
+          .attr("class", "y-axis" + this.props.country)
+          .call(yAxis);
+
+      svg.selectAll(".point")
+          .data(this.props.data)
+          .enter().append("circle")
+          .attr("class", "point")
+          .attr("r", 3)
+          .attr("cy", function(d){ return y(d.y); })
+          .attr("cx", function(d){ return x(d.x); })
+          .style('fill', this.props.fill_color);
       
-        y.domain(d3.extent(this.props.data, function(d){ return d.y}));
-        x.domain(d3.extent(this.props.data, function(d){ return d.x}));
+      // text label for the x axis
+      svg.append("text")             
+          .attr("transform",
+                "translate(" + (width/2) + " ," + 
+                               (height + margin.top + 20) + ")")
+          .style("text-anchor", "middle")
+          .text(this.props.xVar);
 
-        // // see below for an explanation of the calcLinear function
-        var lg = currentState.calcLinear(this.props.data, "x", "y", d3.min(this.props.data, function(d){ return d.x}), d3.min(this.props.data, function(d){ return d.x}));
-        svg.append("line")
-            .attr("class", "regression-" + this.props.country)
-            .attr("x1", x(lg.ptA.x))
-            .attr("y1", y(lg.ptA.y))
-            .attr("x2", x(lg.ptB.x))
-            .attr("y2", y(lg.ptB.y))
-            .attr("stroke", this.props.fill_color)
-            .attr("stroke-width", '3px')
-            .attr("stroke-dasharray", "10,5");
+      // text label for the y axis
+      svg.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0 - margin.left)
+          .attr("x",0 - (height / 2))
+          .attr("dy", "1em")
+          .style("text-anchor", "middle")
+          .text(this.props.yVar);
 
-        svg.append("g")
-            .attr("class", "x-axis-" + this.props.country)
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis)
-
-
-        svg.append("g")
-            .attr("class", "y-axis" + this.props.country)
-            .call(yAxis);
-
-        svg.selectAll(".point")
-            .data(this.props.data)
-            .enter().append("circle")
-            .attr("class", "point")
-            .attr("r", 3)
-            .attr("cy", function(d){ return y(d.y); })
-            .attr("cx", function(d){ return x(d.x); })
-            .style('fill', this.props.fill_color);
-        
-        // text label for the x axis
-        svg.append("text")             
-            .attr("transform",
-                  "translate(" + (width/2) + " ," + 
-                                 (height + margin.top + 20) + ")")
-            .style("text-anchor", "middle")
-            .text(this.props.xVar);
-
-        // text label for the y axis
-        svg.append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left)
-            .attr("x",0 - (height / 2))
-            .attr("dy", "1em")
-            .style("text-anchor", "middle")
-            .text(this.props.yVar);
-
-    }
+  
   }
   render() {
     return (
@@ -195,8 +191,6 @@ class ScatterPlotWithTrendline extends Component {
 ScatterPlotWithTrendline.defaultProps = {
     width: 300,
     height: 300,
-    radius: 5,
-    color: "blue",
     margin: {
         left: 70,
         right: 10,
@@ -206,8 +200,3 @@ ScatterPlotWithTrendline.defaultProps = {
 };
 
 export default ScatterPlotWithTrendline;
-
-
-
-
-

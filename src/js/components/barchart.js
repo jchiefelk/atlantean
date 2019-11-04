@@ -55,8 +55,6 @@ export default class BarChart extends React.Component {
     data.allElements.edges.forEach(function(element, index){
       elementTrace[element.node.id] = index
     });
-
-
     data.allMetal.edges.forEach(function(element){
       let country = element.node.country
       if(country == currentState.state.country) {
@@ -66,10 +64,12 @@ export default class BarChart extends React.Component {
           'site': element.node.site,
           'source':  element.node.source,
         };
-        let elementTraceId = elementTrace[element.node.elementTraceAssayId.id]
-        let elementTraceData = data.allElements.edges[elementTraceId];
-        let combined_node = Object.assign(node, elementTraceData.node);
-        graph_data.push(combined_node)
+        if (element.node.elementTraceAssayId){
+          let elementTraceId = elementTrace[element.node.elementTraceAssayId.id]
+          let elementTraceData = currentState.props.data.allElements.edges[elementTraceId];
+          let combined_node = Object.assign(node, elementTraceData.node);
+          graph_data.push(combined_node)
+        }      
       }
     });
 
@@ -191,7 +191,7 @@ export default class BarChart extends React.Component {
 
     return (
     <div>
-    <h6>{this.state.country} {this.state.description} Trace Elements</h6>
+    <h6 style={{color: 'black'}}>{this.state.country} {this.state.description} Trace Elements</h6>
       <svg width={this.props.width} height={this.props.height}>
       	<YAxis y={40} labels={y.ticks().reverse()} start={15} end={height} />
 	      
