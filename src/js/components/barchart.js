@@ -25,26 +25,7 @@ export default class BarChart extends React.Component {
       'iron': 'Fe'
     };
     this.state = {
-      data: [],
-      binWidth: 10,
-      histogram: {
-        'antimony': 0,
-        'arsenic': 0,
-        'bismuth': 0,
-        'cobalt': 0,
-        'copper': 0,
-        'lead': 0,
-        'nickel': 0,
-        'selenium': 0,
-        'silver': 0,
-        'sulfur': 0,
-        'tellurium': 0,
-        'tin': 0,
-        'zinc': 0,
-        'iron': 0
-      }, 
-      'country': this.props.country,
-      'description': this.props.description
+      data: []
     };
   }
   componentDidMount(){
@@ -57,7 +38,7 @@ export default class BarChart extends React.Component {
     });
     data.allMetal.edges.forEach(function(element){
       let country = element.node.country
-      if(country == currentState.state.country) {
+      if(country == currentState.props.country) {
         let node = {
           'country': country,
           'description': element.node.description,
@@ -82,7 +63,22 @@ export default class BarChart extends React.Component {
 
   convertToWeightPercent(data) {
     let graph_data = []
-    let histogram = this.state.histogram;
+    let histogram = {
+      'antimony': 0,
+      'arsenic': 0,
+      'bismuth': 0,
+      'cobalt': 0,
+      'copper': 0,
+      'lead': 0,
+      'nickel': 0,
+      'selenium': 0,
+      'silver': 0,
+      'sulfur': 0,
+      'tellurium': 0,
+      'tin': 0,
+      'zinc': 0,
+      'iron': 0
+    };
     let country = '';
     data.forEach(function(element){
       let node = { };
@@ -191,7 +187,7 @@ export default class BarChart extends React.Component {
 
     return (
     <div>
-    <h6 style={{color: 'black'}}>{this.state.country} {this.state.description} Trace Elements</h6>
+    <h6 style={{color: 'black'}}>{this.props.country} {this.props.description} Trace Elements</h6>
       <svg width={this.props.width} height={this.props.height}>
       	<YAxis y={40} labels={y.ticks().reverse()} start={15} end={height} />
 	      

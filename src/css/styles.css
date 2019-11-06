@@ -1,21 +1,5 @@
 @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css");
 
-.body {
-  margin: 1em;
-  display: table;
-  font-family: "Helvetica Neue", sans-serif;
-}
-.regression {
-  stroke-width: 2px;
-  stroke: steelblue;
-  stroke-dasharray: 10,5;
-}
-.equation {
-  font-size: 12px;
-  margin-top: 10px;
-  text-align: center;
-}
-
 /* Header */
 .container {
     text-align: center;
@@ -123,12 +107,5 @@ circle {
   content: "\25B6";
   margin: -4px 0 0 -1px;
   top: 50%;
-  left: 100%;
+  le*/ft: 100%;
 }
-
-.regression {
-  stroke-width: 2px;
-  stroke: steelblue;
-  stroke-dasharray: 10,5;
-}
- 

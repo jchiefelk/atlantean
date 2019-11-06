@@ -1,7 +1,8 @@
 import React from 'react';
 import { adopt } from 'react-adopt';
 
-import GraphApp from './components/GraphApp';
+import CopperIsotope from './components/CopperIsotope';
+import ElementTrace from './components/ElementTrace';
 
 import { Query } from '@apollo/react-components';
 import { gql } from "apollo-boost";
@@ -9,18 +10,21 @@ import { gql } from "apollo-boost";
 const COMBINED_QUERIES = gql`
 {
   allMetal {
-        edges {
-          node {
-            id
-            description
-            source
-            site
-            country
-            elementTraceAssayId {
-             id
-           }
-          }
+    edges {
+      node {
+        id
+        description
+        source
+        site
+        country
+        elementTraceAssayId {
+         id
         }
+        isotopeTraceAssayId {
+          id
+        }
+      }
+    }
   }
 
   allElements {
@@ -60,9 +64,20 @@ const COMBINED_QUERIES = gql`
       }
     }
   }
+
+  allIsotopes {
+    edges {
+      node {
+        id
+        deltaCopper65
+        lead208To206
+        lead207To206
+        lead206To204
+      }
+    }
+  }
 }
 `
-
 
 const App = () => (
   <Query query={COMBINED_QUERIES} >
@@ -75,8 +90,7 @@ const App = () => (
         return <h1>ERROR</h1>;
       }
 
-      return <GraphApp data={data}/>;
-  
+      return <ElementTrace data={data}/>;
     }}
   </Query>
 );
