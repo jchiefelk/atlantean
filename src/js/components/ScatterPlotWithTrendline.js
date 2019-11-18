@@ -127,17 +127,17 @@ class ScatterPlotWithTrendline extends Component {
       y.domain(d3.extent(this.props.data, function(d){ return d.y}));
       x.domain(d3.extent(this.props.data, function(d){ return d.x}));
 
-      // // see below for an explanation of the calcLinear function
-      var lg = this.calcLinear(this.props.data, "x", "y", d3.min(this.props.data, function(d){ return d.x}), d3.min(this.props.data, function(d){ return d.x}));
-      svg.append("line")
-          .attr("class", "regression-" + this.props.country)
-          .attr("x1", x(lg.ptA.x))
-          .attr("y1", y(lg.ptA.y))
-          .attr("x2", x(lg.ptB.x))
-          .attr("y2", y(lg.ptB.y))
-          .attr("stroke", this.props.fill_color)
-          .attr("stroke-width", '3px')
-          .attr("stroke-dasharray", "10,5");
+      // Disable trendline for now
+      // var lg = this.calcLinear(this.props.data, "x", "y", d3.min(this.props.data, function(d){ return d.x}), d3.min(this.props.data, function(d){ return d.x}));
+      // svg.append("line")
+      //     .attr("class", "regression-" + this.props.country)
+      //     .attr("x1", x(lg.ptA.x))
+      //     .attr("y1", y(lg.ptA.y))
+      //     .attr("x2", x(lg.ptB.x))
+      //     .attr("y2", y(lg.ptB.y))
+      //     .attr("stroke", this.props.fill_color)
+      //     .attr("stroke-width", '3px')
+      //     .attr("stroke-dasharray", "10,5");
 
       svg.append("g")
           .attr("class", "x-axis-" + this.props.country)

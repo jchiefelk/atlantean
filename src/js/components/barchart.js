@@ -1,14 +1,11 @@
-import React from 'react';
-import * as d3 from 'd3';
-import Bar from './bar';
-import XAxis from './xaxis';
-import YAxis from './yaxis';
+import React from 'react'
+import * as d3 from 'd3'
 
 
 export default class BarChart extends React.Component {
-  constructor(props){
-    super(props);
-    this.elementSymbols = {
+  constructor(){
+  	super()
+  	this.elementSymbols = {
       'antimony': 'Sb',
       'arsenic': 'As',
       'bismuth': 'Bi',
@@ -24,19 +21,18 @@ export default class BarChart extends React.Component {
       'zinc': 'Zn',
       'iron': 'Fe'
     };
-    this.state = {
-      data: []
-    };
   }
-  componentDidMount(){
+  componentDidMount() {
     let currentState = this;
-    let data = this.props.data;
+    let _data = this.props.data;
     let elementTrace = {};
     let graph_data = [];
-    data.allElements.edges.forEach(function(element, index){
+    
+    _data.allElements.edges.forEach(function(element, index){
       elementTrace[element.node.id] = index
     });
-    data.allMetal.edges.forEach(function(element){
+    
+    _data.allMetal.edges.forEach(function(element){
       let country = element.node.country
       if(country == currentState.props.country) {
         let node = {
@@ -54,13 +50,76 @@ export default class BarChart extends React.Component {
       }
     });
 
-    data = this.convertToWeightPercent(graph_data);
+    let bar_data = this.convertToWeightPercent(graph_data);
 
-    this.setState({
-      data: data
-    });
+    // set the dimensions and margins of the graph
+	let margin = {top: 20, right: 20, bottom: 50, left: 40};
+    let width = this.props.width - margin.left - margin.right;
+    let height = this.props.height - margin.top - margin.bottom;
+
+	// set the ranges
+	let x = d3.scaleBand()
+	  .range([0, width])
+	  .padding(0.1);
+
+	let y = d3.scaleLinear()
+	  .range([height, 0]);
+	          
+	// append the svg object to the body of the page
+	// append a 'group' element to 'svg'
+	// moves the 'group' element to the top left margin
+	let svg = d3.select("#" + this.props.id)
+	  .attr("width", width + margin.left + margin.right)
+	  .attr("height", height + margin.top + margin.bottom)
+	  .append("g")
+	  .attr("transform", 
+	          "translate(" + margin.left + "," + margin.top + ")");
+
+	  // Scale the range of the data in the domains
+	  x.domain(bar_data.map(function(d) { return d.element; }));
+	  y.domain([0, d3.max(bar_data, function(d) { return d.percent; })]);
+
+	// append the rectangles for the bar chart
+	svg.selectAll(".bar")
+	  .data(bar_data)
+	  .enter().append("rect")
+	  .attr("class", "bar")
+	  .attr("x", function(d) { return x(d.element); })
+	  // .attr("width", x.bandwidth())
+	  .attr('width', '1.5em')
+	  .attr("y", function(d) { return y(d.percent); })
+	  .attr("height", function(d) { return height - y(d.percent); })
+	  .style('fill', function(d) {
+	    return currentState.props.fillColor;
+	  });
+
+	// add the x Axis
+	svg.append("g")
+	  .attr("transform", "translate(0," + height + ")")
+	  .call(d3.axisBottom(x));
+
+	  // text label for the x axis
+	svg.append("text")             
+	  .attr("transform",
+		            "translate(" + (width/2) + " ," + 
+		                           (height + margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+	  .text("element");
+
+	// add the y Axis
+	svg.append("g")
+	  .call(d3.axisLeft(y));
+
+	// text label for the y axis
+	svg.append("text")
+      .attr("transform", "rotate(-90)")
+	  .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+	  .attr("dy", "1em")
+	  .style("text-anchor", "middle")
+	  .text("Weight %"); 
+
   }
-
   convertToWeightPercent(data) {
     let graph_data = []
     let histogram = {
@@ -116,17 +175,14 @@ export default class BarChart extends React.Component {
       }
 
       for(let _key in node) {
-        
         if(node[_key] == null) {
             delete node[_key];
             continue;
         } 
-      
         if(node[_key].includes('<') == true) {
           let new_value = node[_key].split('<');
           node[_key] = new_value[1];
         }
-
         let metal_measurement = _key.split('P')
         
         if(metal_measurement[1] == 'pm') {          
@@ -138,16 +194,14 @@ export default class BarChart extends React.Component {
           let new_key = metal_measurement[0];
           histogram[new_key] = histogram[new_key] + value;
         }
-    };
-    
-    country = element.country;
-  });
-
-  let new_histogram = [];
-  for(let key in histogram){
-    if(Number.isNaN(histogram[key]) == true){
-      delete histogram[key];
-    } else {
+      };
+      country = element.country;
+    });
+    let new_histogram = [];
+    for(let key in histogram){
+      if(Number.isNaN(histogram[key]) == true){
+        delete histogram[key];
+      } else {
       histogram[key] = histogram[key]/data.length;
       let _hist = {
         'element': this.elementSymbols[key],
@@ -155,49 +209,16 @@ export default class BarChart extends React.Component {
         'country': country
       };
       new_histogram.push(_hist)
+      }
     }
+    return new_histogram;
   }
-  return new_histogram;
-}
 
   render() {
-    let data = this.state.data
-    let margin = {top: 20, right: 20, bottom: 30, left: 45},
-      width = this.props.width - margin.left - margin.right,
-      height = this.props.height - margin.top - margin.bottom;
-
-    let elements = data.map((d) => d.element)
-
-    //D3 mathy bits    
-    let ticks = d3.range(0, width, (width / data.length))
-    
-    let x = d3.scaleOrdinal()
-      .domain(elements)
-      .range(ticks)
-    let y = d3.scaleLinear()
-      .domain([0, d3.max(data, (d) => d.percent)])
-      .range([height, 0])
-
-    let bars = []
-    let bottom = this.props.height - 50;
-    
-    data.forEach((datum, index) => {
-      bars.push(<Bar data={data} key={index} x={x(datum.element)} y={bottom - 6 - (height - y(datum.percent))} width={10} height={height - y(datum.percent)} fill_color={this.props.fill_color}/>)
-    })
-
-    return (
-    <div>
-    <h6 style={{color: 'black'}}>{this.props.country} {this.props.description} Trace Elements</h6>
-      <svg width={this.props.width} height={this.props.height}>
-      	<YAxis y={40} labels={y.ticks().reverse()} start={15} end={height} />
-	      
-	      <g className="chart" transform={`translate(${margin.left},${margin.top})`}>
-	         { bars }
-	         <XAxis x={ bottom } labels={elements} start={0} end={width} />
-	      </g>
-      </svg>
-    </div>
+    return(
+	  <div className="body">
+	    <svg id={this.props.id}/>
+	  </div>
     );
   }
-
 }

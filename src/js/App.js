@@ -1,6 +1,7 @@
 import React from 'react';
 import { adopt } from 'react-adopt';
 
+import LeadIsotope from './components/LeadIsotope';
 import CopperIsotope from './components/CopperIsotope';
 import ElementTrace from './components/ElementTrace';
 
@@ -78,7 +79,6 @@ const COMBINED_QUERIES = gql`
   }
 }
 `
-
 const App = () => (
   <Query query={COMBINED_QUERIES} >
     {result => {

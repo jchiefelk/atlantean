@@ -1,11 +1,9 @@
 import React from 'react';
 import Plots from './plots';
-import BarChart from './barchart';
-
+import BarChart from './BarChart'
 
 const fillColors = ['red', 'black', 'purple', 'gray', 'orange', 'lightskyblue', 'limegreen', 'pink'];
 const countries = ['Turkey', 'Cyprus', 'Sardinia', 'USA', 'Britain', 'Greece, Crete', 'Greece', 'Spain'];
-      
 
 const ElementTrace = (props) => {
   return(
@@ -25,18 +23,18 @@ const ElementTrace = (props) => {
 	  </tr>
 
 	  <tr>
-		<th><div style={{'marginLeft': 100}}><BarChart data={props.data} width={400} height={300} country={'Cyprus'} fill_color={fillColors[0]} description={'Copper Ore'}/></div></th>
-		<th><div style={{'marginLeft': 100}}><BarChart data={props.data} width={400} height={300} country={'Turkey'} fill_color={fillColors[1]} description={'Uluburun Shipreck Bun and Oxhide Ingots'}/></div></th>
-		<th><div style={{'marginLeft': 100}}><BarChart data={props.data} width={400} height={300} country={'Greece, Crete'} fill_color={fillColors[2]} description={'Copper Artifacts'}/></div></th>
-	    <th><div style={{'marginLeft': 100}}><BarChart data={props.data} width={400} height={300} country={'Greece'} fill_color={fillColors[3]} description={'Copper Artifacts'}/></div></th>
-	  </tr>
-	  <tr>
-		<th><div style={{'marginLeft': 100}}><BarChart data={props.data} width={400} height={300} country={'Sardinia'} fill_color={fillColors[4]} description={'Bun and Oxhide Ingots'}/></div></th>
-		<th><div style={{'marginLeft': 100}}><BarChart data={props.data} width={400} height={300} country={'Britain'} fill_color={fillColors[5]} description={'Bun Ingots'}/></div></th>
-		<th><div style={{'marginLeft': 100}}><BarChart data={props.data} width={400} height={300} country={'Spain'} fill_color={fillColors[6]} description={'Copper Artifacts'}/></div></th>
-		<th><div style={{'marginLeft': 100}}><BarChart data={props.data} width={400} height={300} country={'USA'} fill_color={fillColors[7]} description={'Copper Ore and Artifacts'}/></div></th>
+		<th><BarChart width={400} height={300} data={props.data} country={'Cyprus'} fillColor={fillColors[0]} id={'Cyprus_elementTrace_bar'}/></th>
+	    <th><BarChart width={400} height={300} data={props.data} country={'Turkey'} fillColor={fillColors[1]} id={'Turkey_elementTrace_bar'}/></th>
+	  	<th><BarChart width={400} height={300} data={props.data} country={'Greece, Crete'} fillColor={fillColors[2]} id={'Crete_elementTrace_bar'}/></th>
+	  	<th><BarChart width={400} height={300} data={props.data} country={'Greece'} fillColor={fillColors[3]} id={'Greece_elementTrace_bar'}/></th>
 	  </tr>
 
+	  <tr>
+		<th><BarChart width={400} height={300} data={props.data} country={'Sardinia'} fillColor={fillColors[4]} id={'Sardinia_elementTrace_bar'}/></th>
+	    <th><BarChart width={400} height={300} data={props.data} country={'Spain'} fillColor={fillColors[5]} id={'Spain_elementTrace_bar'}/></th>
+	  	<th><BarChart width={400} height={300} data={props.data} country={'Britain'} fillColor={fillColors[6]} id={'Britain_elementTrace_bar'}/></th>
+	  	<th><BarChart width={400} height={300} data={props.data} country={'USA'} fillColor={fillColors[7]} id={'USA_elementTrace_bar'}/></th>
+	  </tr>
 	</table>
   );
 }
