@@ -1,5 +1,3 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 <h1>Atlantean</h1>
 <p>
 Queries data from GraphQL API <a href='https://github.com/jchiefelk/metalage'>https://github.com/jchiefelk/metalage</a> and graphs it with D3.js
